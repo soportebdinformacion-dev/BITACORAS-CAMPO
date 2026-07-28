@@ -1,12 +1,14 @@
-const CACHE_NAME = 'agricola-huarmey-v1';
+const CACHE_NAME = 'huarmey-incidencias-v1';
 const ASSETS = [
   './',
-  'index.html',
-  'manifest.json'
+  './index.html',
+  './manifest.json',
+  './logo.png'
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
+// Instalación del Service Worker
+self.addEventListener('install', (event) => {
+  event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(ASSETS);
     })
@@ -14,8 +16,9 @@ self.addEventListener('install', (e) => {
   self.skipWaiting();
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
+// Activación y limpieza de cachés antiguas
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.map((key) => {
@@ -29,22 +32,16 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', (e) => {
-  // Estrategia Cache First con fallback a Network
-  e.respondWith(
-    caches.match(e.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(e.request).then((networkResponse) => {
-        return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(e.request, networkResponse.clone());
-          return networkResponse;
-        });
-      });
-    }).catch(() => {
-      // Retorna fallback si la red falla
-      return caches.match('index.html');
+// Intercepción de peticiones HTTP
+self.addEventListener('fetch', (event) => {
+  // Ignorar peticiones a Google Apps Script para no interferir con la sincronización
+  if (event.request.url.includes('script.google.com')) {
+    return;
+  }
+  
+  event.respondWith(
+    caches.match(event.request).then((response) => {
+      return response || fetch(event.request);
     })
   );
 });
