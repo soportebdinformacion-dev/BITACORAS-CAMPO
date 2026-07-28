@@ -1,30 +1,50 @@
-// Service Worker básico para caché offline
-const CACHE_NAME = 'huarmey-cache-v1';
-const urlsToCache = [
-  './index.html',
-  './manifest.json',
-  './image_0.png',
-  'https://cdn.jsdelivr.net/npm/dexie@3.2.0/dist/dexie.min.js'
+const CACHE_NAME = 'agricola-huarmey-v1';
+const ASSETS = [
+  './',
+  'index.html',
+  'manifest.json'
 ];
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+self.addEventListener('install', (e) => {
+  e.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS);
+    })
   );
+  self.skipWaiting();
 });
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        // No en caché - descargar
-        return fetch(event.request);
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', (e) => {
+  // Estrategia Cache First con fallback a Network
+  e.respondWith(
+    caches.match(e.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
       }
-    )
+      return fetch(e.request).then((networkResponse) => {
+        return caches.open(CACHE_NAME).then((cache) => {
+          cache.put(e.request, networkResponse.clone());
+          return networkResponse;
+        });
+      });
+    }).catch(() => {
+      // Retorna fallback si la red falla
+      return caches.match('index.html');
+    })
   );
 });
