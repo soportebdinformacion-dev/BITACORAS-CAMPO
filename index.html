@@ -1,549 +1,273 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agrícola Huarmey - Registro de Incidencias</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#B3261E">
-  <style>
-    :root {
-      --rojo-agricola: #B3261E;
-      --rojo-oscuro: #8C1D18;
-      --verde-hoja: #388E3C;
-      --blanco: #FFFFFF;
-      --gris-claro: #F4F6F8;
-      --gris-borde: #CFD8DC;
-      --texto-primario: #263238;
-      --sombra: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    body {
-      background-color: var(--gris-claro);
-      color: var(--texto-primario);
-      padding-bottom: 30px;
-    }
-
-    header {
-      background-color: var(--rojo-agricola);
-      color: var(--blanco);
-      padding: 15px;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-      box-shadow: var(--sombra);
-    }
-
-    header img {
-      height: 45px;
-      width: auto;
-      background: white;
-      border-radius: 50%;
-      padding: 2px;
-    }
-
-    header h1 {
-      font-size: 1.1rem;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 15px auto;
-      padding: 0 12px;
-    }
-
-    /* Estado de Conexión */
-    #status-bar {
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 15px;
-      font-size: 0.9rem;
-      transition: all 0.3s ease;
-    }
-
-    .online {
-      background-color: #E8F5E9;
-      color: #2E7D32;
-      border: 1px solid #A5D6A7;
-    }
-
-    .offline {
-      background-color: #FFEBEE;
-      color: #C62828;
-      border: 1px solid #FFCDD2;
-    }
-
-    .card {
-      background: var(--blanco);
-      padding: 18px;
-      border-radius: 12px;
-      box-shadow: var(--sombra);
-      margin-bottom: 20px;
-    }
-
-    .card-title {
-      font-size: 1.1rem;
-      color: var(--rojo-agricola);
-      margin-bottom: 15px;
-      border-bottom: 2px solid var(--gris-claro);
-      padding-bottom: 8px;
-      font-weight: bold;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: 600;
-      font-size: 0.85rem;
-      color: #455A64;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1.5px solid var(--gris-borde);
-      border-radius: 8px;
-      font-size: 0.95rem;
-      background-color: #FAFAFA;
-      transition: border-color 0.2s ease;
-    }
-
-    input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: var(--rojo-agricola);
-      background-color: var(--blanco);
-    }
-
-    input[readonly] {
-      background-color: #ECEFF1;
-      color: #546E7A;
-      font-weight: 600;
-    }
-
-    .row {
-      display: flex;
-      gap: 10px;
-    }
-
-    .row .form-group {
-      flex: 1;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      transition: background 0.2s;
-    }
-
-    .btn-primary {
-      background-color: var(--rojo-agricola);
-      color: var(--blanco);
-      box-shadow: 0 3px 6px rgba(179, 38, 30, 0.3);
-    }
-
-    .btn-primary:active {
-      background-color: var(--rojo-oscuro);
-    }
-
-    .btn-sync {
-      background-color: var(--verde-hoja);
-      color: var(--blanco);
-      margin-top: 10px;
-    }
-
-    /* Tabla de registros guardados */
-    .table-container {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      font-size: 0.8rem;
-    }
-
-    th, td {
-      padding: 10px 8px;
-      text-align: left;
-      border-bottom: 1px solid var(--gris-borde);
-    }
-
-    th {
-      background-color: #F0F4F8;
-      color: var(--texto-primario);
-    }
-
-    .badge {
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-size: 0.7rem;
-      font-weight: bold;
-      display: inline-block;
-      text-align: center;
-    }
-
-    .badge-pendiente { background-color: #FFF3E0; color: #E65100; }
-    .badge-sincronizado { background-color: #E8F5E9; color: #1B5E20; }
-    .badge-error { background-color: #FFEBEE; color: #B71C1C; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitácora de Campo - Agrícola Huarmey</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="image_0.png" type="image/png">
+    <style>
+        /* Estilos CSS (puedes personalizar) */
+        body { font-family: sans-serif; background-color: #f4f4f4; margin: 0; padding: 20px; }
+        header { text-align: center; margin-bottom: 20px; }
+        img.logo { width: 100px; height: auto; }
+        h1 { color: #880000; margin-top: 10px; }
+        form { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #555; }
+        input[type="date"], input[type="time"], input[type="number"], select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        textarea { resize: vertical; height: 100px; }
+        button { background-color: #a10f13; color: #fff; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; margin-bottom: 10px; }
+        button:hover { background-color: #c9141a; }
+        #log { margin-top: 20px; padding: 10px; border-radius: 4px; display: none; }
+        .success { background-color: #dff0d8; color: #3c763d; border: 1px solid #d6e9c6; }
+        .error { background-color: #f2dede; color: #a94442; border: 1px solid #ebccd1; }
+        .pending { background-color: #fcf8e3; color: #8a6d3b; border: 1px solid #faebcc; }
+        /* Ocultar campos que se llenan automáticamente */
+        .auto-field { display: none; }
+    </style>
 </head>
 <body>
+    <header>
+        <img src="image_0.png" alt="Logo Agrícola Huarmey" class="logo">
+        <h1>Registro de Incidencias</h1>
+    </header>
 
-  <header>
-    <img src="logo.png" alt="Logo Agrícola Huarmey" id="app-logo">
-    <h1>Agrícola Huarmey<br><small style="font-size: 0.75rem; font-weight: normal;">Incidencias en Campo</small></h1>
-  </header>
-
-  <div class="container">
-    <!-- Indicador Estado de Conexión -->
-    <div id="status-bar" class="online">🌐 Modo Online - Conectado</div>
-
-    <!-- Formulario de Entrada -->
-    <form id="incidencia-form" class="card">
-      <div class="card-title">📝 Nuevo Registro de Incidencia</div>
-
-      <div class="form-group">
-        <label for="fecha_incidencia">FECHA INCIDENCIA *</label>
-        <input type="date" id="fecha_incidencia" required>
-      </div>
-
-      <div class="row">
+    <form id="incidenciaForm">
         <div class="form-group">
-          <label for="dia">DÍA</label>
-          <input type="text" id="dia" readonly placeholder="AUTO">
+            <label for="FECHA_INCIDENCIA">Fecha de Incidencia:</label>
+            <input type="date" id="FECHA_INCIDENCIA" name="FECHA_INCIDENCIA" required>
         </div>
+
+        <!-- Campos automáticos (ocultos en el formulario pero necesarios para el envío) -->
+        <div class="form-group auto-field">
+            <label for="DIA">Día:</label>
+            <input type="text" id="DIA" name="DIA" readonly>
+        </div>
+        <div class="form-group auto-field">
+            <label for="SEMANA">Semana:</label>
+            <input type="text" id="SEMANA" name="SEMANA" readonly>
+        </div>
+
         <div class="form-group">
-          <label for="semana">SEMANA</label>
-          <input type="text" id="semana" readonly placeholder="AUTO">
+            <label for="RESPONSABLE_REGISTRO">Responsable del Registro:</label>
+            <select id="RESPONSABLE_REGISTRO" name="RESPONSABLE_REGISTRO" required>
+                <option value="">Seleccione un responsable</option>
+                <option value="RIVALDO VALLES">RIVALDO VALLES</option>
+                <option value="JOSE CHAVEZ">JOSE CHAVEZ</option>
+            </select>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="responsable_registro">RESPONSABLE REGISTRO *</label>
-        <select id="responsable_registro" required>
-          <option value="">Seleccione...</option>
-          <option value="RIVALDO VALLES">RIVALDO VALLES</option>
-          <option value="JOSE CHAVEZ">JOSE CHAVEZ</option>
-        </select>
-      </div>
-
-      <div class="row">
         <div class="form-group">
-          <label for="hora_inicio">HORA INICIO *</label>
-          <input type="time" id="hora_inicio" required>
+            <label for="HORA_INICIO">Hora Inicio:</label>
+            <input type="time" id="HORA_INICIO" name="HORA_INICIO" required>
         </div>
+
         <div class="form-group">
-          <label for="hora_fin">HORA FIN *</label>
-          <input type="time" id="hora_fin" required>
+            <label for="HORA_FIN">Hora Fin:</label>
+            <input type="time" id="HORA_FIN" name="HORA_FIN" required>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label for="personas">PERSONAS (Nº) *</label>
-        <input type="number" id="personas" min="1" step="1" required placeholder="Cantidad de personal">
-      </div>
+        <div class="form-group">
+            <label for="PERSONAS">Personas Afectadas:</label>
+            <input type="number" id="PERSONAS" name="PERSONAS" required>
+        </div>
 
-      <div class="form-group">
-        <label for="tipo">TIPO *</label>
-        <select id="tipo" required>
-          <option value="">Seleccione...</option>
-          <option value="CLIMA">CLIMA</option>
-          <option value="PRODUCCION">PRODUCCION</option>
-          <option value="TRANSPORTE">TRANSPORTE</option>
-          <option value="SSOMA">SSOMA</option>
-          <option value="COMEDORES">COMEDORES</option>
-          <option value="HERRAMIENTAS COSECHA">HERRAMIENTAS COSECHA</option>
-          <option value="ALIMENTACIÓN">ALIMENTACIÓN</option>
-          <option value="PAGOS">PAGOS</option>
-        </select>
-      </div>
+        <div class="form-group">
+            <label for="TIPO">Tipo de Incidencia:</label>
+            <select id="TIPO" name="TIPO" required>
+                <option value="">Seleccione un tipo</option>
+                <option value="CLIMA">CLIMA</option>
+                <option value="PRODUCCION">PRODUCCION</option>
+                <option value="TRANSPORTE">TRANSPORTE</option>
+                <option value="SSOMA">SSOMA</option>
+                <option value="COMEDORES">COMEDORES</option>
+                <option value="HERRAMIENTAS COSECHA">HERRAMIENTAS COSECHA</option>
+                <option value="ALIMENTACIÓN">ALIMENTACIÓN</option>
+                <option value="PAGOS">PAGOS</option>
+            </select>
+        </div>
 
-      <div class="form-group">
-        <label for="descripcion_problema">DESCRIPCIÓN DEL PROBLEMA *</label>
-        <textarea id="descripcion_problema" rows="3" required placeholder="Detalle la incidencia acontecida..."></textarea>
-      </div>
+        <div class="form-group">
+            <label for="DESCRIPCION_PROBLEMA">Descripción del Problema:</label>
+            <textarea id="DESCRIPCION_PROBLEMA" name="DESCRIPCION_PROBLEMA" required></textarea>
+        </div>
 
-      <div class="form-group">
-        <label for="accion_tomada">ACCIÓN TOMADA *</label>
-        <textarea id="accion_tomada" rows="3" required placeholder="Describa la solución o medidas aplicadas..."></textarea>
-      </div>
+        <div class="form-group">
+            <label for="ACCION_TOMADA">Acción Tomada:</label>
+            <textarea id="ACCION_TOMADA" name="ACCION_TOMADA" required></textarea>
+        </div>
 
-      <div class="form-group">
-        <label for="variedad">VARIEDAD *</label>
-        <select id="variedad" required>
-          <option value="">Seleccione...</option>
-          <option value="MAGICA 2024">MAGICA 2024</option>
-          <option value="MAGICA 2025">MAGICA 2025</option>
-          <option value="MEGA EARLY 2026">MEGA EARLY 2026</option>
-        </select>
-      </div>
+        <div class="form-group">
+            <label for="MODULO_TURNO">Módulo-Turno:</label>
+            <select id="MODULO_TURNO" name="MODULO_TURNO" required>
+                <option value="">Seleccione Módulo-Turno</option>
+                <script>
+                    for (let m = 1; m <= 9; m++) {
+                        for (let t = 1; t <= 5; t++) {
+                            document.write(`<option value="Módulo ${m}-Turno ${t}">Módulo ${m}-Turno ${t}</option>`);
+                        }
+                    }
+                </script>
+            </select>
+        </div>
 
-      <div class="form-group">
-        <label for="modulo_turno">MÓDULO - TURNO *</label>
-        <select id="modulo_turno" required>
-          <option value="">Seleccione...</option>
-        </select>
-      </div>
+        <div class="form-group">
+            <label for="RESPONSABLE">Responsable (Área):</label>
+            <select id="RESPONSABLE" name="RESPONSABLE" required>
+                <option value="">Seleccione un área responsable</option>
+                <option value="Recursos Humanos (RRHH)">Recursos Humanos (RRHH)</option>
+                <option value="Seguridad y Salud (SST)">Seguridad y Salud (SST)</option>
+                <option value="Operaciones / Campo">Operaciones / Campo</option>
+                <option value="Riego e Infraestructura">Riego e Infraestructura</option>
+                <option value="Logística">Logística</option>
+            </select>
+        </div>
 
-      <div class="form-group">
-        <label for="responsable">RESPONSABLE ÁREA *</label>
-        <select id="responsable" required>
-          <option value="">Seleccione...</option>
-          <option value="Recursos Humanos (RRHH)">Recursos Humanos (RRHH)</option>
-          <option value="Seguridad y Salud (SST)">Seguridad y Salud (SST)</option>
-          <option value="Operaciones / Campo">Operaciones / Campo</option>
-          <option value="Riego e Infraestructura">Riego e Infraestructura</option>
-          <option value="Logística">Logística</option>
-        </select>
-      </div>
-
-      <button type="submit" class="btn btn-primary">💾 Registrar Incidencia</button>
+        <button type="submit">Registrar Incidencia</button>
+        <button type="button" id="syncBtn" style="background-color: #555;">Sincronizar Pendientes</button>
     </form>
 
-    <!-- Panel de Registros Guardados / Sincronización -->
-    <div class="card">
-      <div class="card-title">📋 Bitácora Local</div>
-      <button id="btn-force-sync" class="btn btn-sync">🔄 Sincronizar Pendientes</button>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Tipo</th>
-              <th>Resp.</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody id="tabla-registros">
-            <!-- Registros dinámicos -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+    <div id="log"></div>
 
-  <script>
-    // URL DE GOOGLE APPS SCRIPT (Reemplazar con la URL obtenida tras el despliegue)
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzokhYSW-4sDW8tqPzZ2-J9CCKeWZFI2uk9duXZtzH5DnXcC2l8vLcsGmuulNbYwv5w/exec";
+    <script src="https://cdn.jsdelivr.net/npm/dexie@3.2.0/dist/dexie.min.js"></script>
+    <script>
+        // REEMPLAZA CON LA URL DE TU APLICACIÓN WEB DE GOOGLE APPS SCRIPT
+        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyCX_UnErJw2RsUfcdcjnBUOBYlAs2-rcHuti9s1xfdCZMrUtcXSrFjZ3qqkj_0XFxN/exec";
 
-    // --- Cargar Opciones de Módulo - Turno Dinámicamente ---
-    const selectModuloTurno = document.getElementById('modulo_turno');
-    for (let m = 1; m <= 9; m++) {
-      for (let t = 1; t <= 5; t++) {
-        const option = document.createElement('option');
-        const val = `Módulo ${m}-Turno ${t}`;
-        option.value = val;
-        option.textContent = val;
-        selectModuloTurno.appendChild(option);
-      }
-    }
+        // Inicializar Dexie.js (IndexedDB wrapper)
+        const db = new Dexie('BitacorasHuarmeyDB');
+        db.version(1).stores({
+            incidencias: '++id,FECHA_INCIDENCIA,status' // ++id es auto-increment
+        });
 
-    // --- Base de Datos IndexedDB ---
-    let db;
-    const request = indexedDB.open('AgricolaHuarmeyDB', 1);
+        const form = document.getElementById('incidenciaForm');
+        const log = document.getElementById('log');
+        const syncBtn = document.getElementById('syncBtn');
 
-    request.onupgradeneeded = (e) => {
-      db = e.target.result;
-      if (!db.objectStoreNames.contains('incidencias')) {
-        const store = db.createObjectStore('incidencias', { keyPath: 'id', autoIncrement: true });
-        store.createIndex('estado', 'estado', { unique: false });
-      }
-    };
-
-    request.onsuccess = (e) => {
-      db = e.target.result;
-      cargarTablaRegistros();
-      checkNetworkAndSync();
-    };
-
-    request.onerror = (e) => console.error("Error IndexedDB:", e);
-
-    // --- Manejo de Fechas Automáticas ---
-    document.getElementById('fecha_incidencia').addEventListener('change', function() {
-      const fechaVal = this.value;
-      if (!fechaVal) return;
-
-      const fecha = new Date(fechaVal + 'T00:00:00');
-      
-      // Día de la semana en mayúsculas
-      const dias = ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'];
-      document.getElementById('dia').value = dias[fecha.getDay()];
-
-      // Cálculo de Número de Semana ISO
-      const target = new Date(fecha.valueOf());
-      const dayNr = (fecha.getDay() + 6) % 7;
-      target.setDate(target.getDate() - dayNr + 3);
-      const firstThursday = target.valueOf();
-      target.setMonth(0, 1);
-      if (target.getDay() !== 4) {
-        target.setMonth(0, 1 + ((4 - target.getDay() + 7) % 7));
-      }
-      const weekNumber = 1 + Math.round((firstThursday - target.valueOf()) / 604800000);
-      document.getElementById('semana').value = `SEMANA - ${weekNumber}`;
-    });
-
-    // --- Detección de Red ---
-    const statusBar = document.getElementById('status-bar');
-    function updateOnlineStatus() {
-      if (navigator.onLine) {
-        statusBar.className = 'online';
-        statusBar.textContent = '🌐 Modo Online - Conectado';
-        checkNetworkAndSync();
-      } else {
-        statusBar.className = 'offline';
-        statusBar.textContent = '⚠️ Modo Offline - Trabajando localmente';
-      }
-    }
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-
-    // --- Envío del Formulario ---
-    document.getElementById('incidencia-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-
-      const registro = {
-        fecha_incidencia: document.getElementById('fecha_incidencia').value,
-        dia: document.getElementById('dia').value,
-        semana: document.getElementById('semana').value,
-        responsable_registro: document.getElementById('responsable_registro').value,
-        hora_inicio: document.getElementById('hora_inicio').value,
-        hora_fin: document.getElementById('hora_fin').value,
-        personas: parseInt(document.getElementById('personas').value, 10),
-        tipo: document.getElementById('tipo').value,
-        descripcion_problema: document.getElementById('descripcion_problema').value,
-        accion_tomada: document.getElementById('accion_tomada').value,
-        variedad: document.getElementById('variedad').value,
-        modulo_turno: document.getElementById('modulo_turno').value,
-        responsable: document.getElementById('responsable').value,
-        estado: 'Pendiente',
-        fecha_creacion: new Date().toISOString()
-      };
-
-      const tx = db.transaction(['incidencias'], 'readwrite');
-      const store = tx.objectStore('incidencias');
-      store.add(registro);
-
-      tx.oncomplete = () => {
-        alert('✅ Registro guardado localmente');
-        document.getElementById('incidencia-form').reset();
-        cargarTablaRegistros();
-        if (navigator.onLine) checkNetworkAndSync();
-      };
-    });
-
-    // --- Cargar Tabla en la Interfaz ---
-    function cargarTablaRegistros() {
-      const tbody = document.getElementById('tabla-registros');
-      tbody.innerHTML = '';
-
-      const tx = db.transaction(['incidencias'], 'readonly');
-      const store = tx.objectStore('incidencias');
-      const req = store.openCursor(null, 'prev');
-
-      req.onsuccess = (e) => {
-        const cursor = e.target.result;
-        if (cursor) {
-          const item = cursor.value;
-          const tr = document.createElement('tr');
-          
-          let classBadge = 'badge-pendiente';
-          if (item.estado === 'Sincronizado') classBadge = 'badge-sincronizado';
-          if (item.estado === 'Error') classBadge = 'badge-error';
-
-          tr.innerHTML = `
-            <td>${item.fecha_incidencia}</td>
-            <td>${item.tipo}</td>
-            <td>${item.responsable_registro}</td>
-            <td><span class="badge ${classBadge}">${item.estado}</span></td>
-          `;
-          tbody.appendChild(tr);
-          cursor.continue();
+        // Función para mostrar mensajes en el log
+        function showLog(message, type) {
+            log.textContent = message;
+            log.className = type;
+            log.style.display = 'block';
+            setTimeout(() => { log.style.display = 'none'; }, 5000); // Ocultar después de 5s
         }
-      };
-    }
 
-    // --- Motor de Sincronización con Google Sheets ---
-    async function checkNetworkAndSync() {
-      if (!navigator.onLine) return;
+        // Manejar el envío del formulario
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-      const tx = db.transaction(['incidencias'], 'readonly');
-      const store = tx.objectStore('incidencias');
-      const req = store.getAll();
+            const formData = new FormData(form);
+            const incidencia = Object.fromEntries(formData.entries());
+            
+            // Llenar campos automáticos antes de guardar
+            incidencia.DIA = getDiaSemana(incidencia.FECHA_INCIDENCIA);
+            incidencia.SEMANA = getSemanaDelAño(incidencia.FECHA_INCIDENCIA);
+            incidencia.status = 'Pendiente'; // Estado inicial para modo offline
 
-      req.onsuccess = async () => {
-        const registros = req.result;
-        const pendientes = registros.filter(r => r.estado === 'Pendiente' || r.estado === 'Error');
+            try {
+                // Guardar localmente en IndexedDB
+                const id = await db.incidencias.add(incidencia);
+                incidencia.id = id; // Guardar el ID generado
+                
+                // Intentar sincronizar si hay conexión
+                if (navigator.onLine) {
+                    await sincronizarIncidencia(incidencia);
+                } else {
+                    showLog('Incidencia guardada localmente (Pendiente de sincronización).', 'pending');
+                }
 
-        for (let item of pendientes) {
-          try {
-            const respuesta = await fetch(APPS_SCRIPT_URL, {
-              method: 'POST',
-              mode: 'no-cors', // Soporte para Google Apps Script Web App
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(item)
-            });
+            } catch (error) {
+                showLog('Error al guardar localmente: ' + error.message, 'error');
+                console.error(error);
+            } finally {
+                // LIMPIEZA AUTOMÁTICA DEL FORMULARIO
+                form.reset();
+            }
+        });
 
-            // Al usar no-cors asumimos la entrega si no arroja excepción de red
-            actualizarEstadoRegistro(item.id, 'Sincronizado');
-          } catch (err) {
-            console.error("Error sincronizando:", err);
-            actualizarEstadoRegistro(item.id, 'Error');
-          }
+        // Función para sincronizar una incidencia con Google Sheets
+        async function sincronizarIncidencia(incidencia) {
+            try {
+                const response = await fetch(GAS_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Importante para peticiones a Apps Script sin CORS
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(incidencia)
+                });
+
+                // Actualizar estado localmente a 'Sincronizado'
+                await db.incidencias.update(incidencia.id, { status: 'Sincronizado' });
+                showLog('Incidencia registrada y sincronizada con éxito en Google Sheets.', 'success');
+
+            } catch (error) {
+                console.error('Error durante la sincronización:', error);
+                await db.incidencias.update(incidencia.id, { status: 'Error' });
+                showLog('Error de conexión. La incidencia se sincronizará cuando vuelvas a estar en línea.', 'error');
+            }
         }
-      };
-    }
 
-    function actualizarEstadoRegistro(id, nuevoEstado) {
-      const tx = db.transaction(['incidencias'], 'readwrite');
-      const store = tx.objectStore('incidencias');
-      const req = store.get(id);
+        // Función para sincronizar todas las incidencias pendientes
+        async function sincronizarPendientes() {
+            if (!navigator.onLine) {
+                showLog('No hay conexión a internet. Intenta más tarde.', 'error');
+                return;
+            }
 
-      req.onsuccess = () => {
-        const data = req.result;
-        if (data) {
-          data.estado = nuevoEstado;
-          store.put(data);
+            try {
+                const pendientes = await db.incidencias.where('status').anyOf('Pendiente', 'Error').toArray();
+                
+                if (pendientes.length === 0) {
+                    showLog('No hay incidencias pendientes por sincronizar.', 'success');
+                    return;
+                }
+
+                showLog(`Sincronizando ${pendientes.length} incidencias pendientes...`, 'pending');
+
+                for (const incidencia of pendientes) {
+                    await sincronizarIncidencia(incidencia);
+                }
+                
+                showLog('Sincronización completa.', 'success');
+
+            } catch (error) {
+                console.error('Error durante la sincronización automática:', error);
+                showLog('Error inesperado durante la sincronización masiva.', 'error');
+            }
         }
-      };
 
-      tx.oncomplete = () => {
-        cargarTablaRegistros();
-      };
-    }
+        // Evento para el botón de sincronización manual
+        syncBtn.addEventListener('click', sincronizarPendientes);
 
-    document.getElementById('btn-force-sync').addEventListener('click', checkNetworkAndSync);
+        // Intentar sincronizar automáticamente al recuperar la conexión
+        window.addEventListener('online', sincronizarPendientes);
 
-    // --- Registro del Service Worker ---
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then(() => console.log('Service Worker Registrado'))
-        .catch(err => console.error('Error al registrar SW:', err));
-    }
-  </script>
+        // Funciones auxiliares para fecha y semana
+        function getDiaSemana(fechaStr) {
+            const dateParts = fechaStr.split("-");
+            const fecha = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+            const dias = ["DOMINGO", "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO"];
+            return dias[fecha.getDay()];
+        }
+
+        function getSemanaDelAño(fechaStr) {
+            const dateParts = fechaStr.split("-");
+            const fecha = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+            const d = new Date(Date.UTC(fecha.getFullYear(), fecha.getMonth(), fecha.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+            const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            const weekNo = Math.ceil((( (d - yearStart) / 86400000) + 1) / 7);
+            return weekNo;
+        }
+
+        // Registrar el Service Worker para capacidades offline
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(() => console.log('Service Worker registrado correctamente.'))
+                .catch(error => console.error('Error al registrar el Service Worker:', error));
+        }
+    </script>
 </body>
 </html>
