@@ -2,18 +2,20 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Agrícola Huarmey - Bitácora</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agrícola Huarmey - Registro de Incidencias</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#D0291E">
+  <meta name="theme-color" content="#B3261E">
   <style>
     :root {
-      --primary-red: #D0291E;
-      --primary-green: #328829;
-      --bg-light: #F4F6F8;
-      --text-dark: #2C3E50;
-      --card-bg: #FFFFFF;
-      --border-color: #E2E8F0;
+      --rojo-agricola: #B3261E;
+      --rojo-oscuro: #8C1D18;
+      --verde-hoja: #388E3C;
+      --blanco: #FFFFFF;
+      --gris-claro: #F4F6F8;
+      --gris-borde: #CFD8DC;
+      --texto-primario: #263238;
+      --sombra: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     * {
@@ -24,138 +26,124 @@
     }
 
     body {
-      background-color: var(--bg-light);
-      color: var(--text-dark);
+      background-color: var(--gris-claro);
+      color: var(--texto-primario);
       padding-bottom: 30px;
     }
 
     header {
-      background-color: var(--card-bg);
-      border-bottom: 3px solid var(--primary-red);
-      padding: 12px 16px;
+      background-color: var(--rojo-agricola);
+      color: var(--blanco);
+      padding: 15px;
+      text-align: center;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      justify-content: center;
+      gap: 15px;
+      box-shadow: var(--sombra);
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand img {
-      height: 42px;
+    header img {
+      height: 45px;
       width: auto;
-    }
-
-    .brand h1 {
-      font-size: 1.1rem;
-      color: var(--primary-red);
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    .connection-status {
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: bold;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .status-online {
-      background-color: #E6F4EA;
-      color: var(--primary-green);
-    }
-
-    .status-offline {
-      background-color: #FCE8E6;
-      color: var(--primary-red);
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
+      background: white;
       border-radius: 50%;
+      padding: 2px;
     }
 
-    .online-dot { background-color: var(--primary-green); }
-    .offline-dot { background-color: var(--primary-red); }
+    header h1 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
 
     .container {
       max-width: 600px;
-      margin: 16px auto;
+      margin: 15px auto;
       padding: 0 12px;
     }
 
+    /* Estado de Conexión */
+    #status-bar {
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .online {
+      background-color: #E8F5E9;
+      color: #2E7D32;
+      border: 1px solid #A5D6A7;
+    }
+
+    .offline {
+      background-color: #FFEBEE;
+      color: #C62828;
+      border: 1px solid #FFCDD2;
+    }
+
     .card {
-      background: var(--card-bg);
+      background: var(--blanco);
+      padding: 18px;
       border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      margin-bottom: 16px;
+      box-shadow: var(--sombra);
+      margin-bottom: 20px;
     }
 
     .card-title {
       font-size: 1.1rem;
-      color: var(--primary-green);
-      margin-bottom: 16px;
-      border-bottom: 2px solid var(--bg-light);
+      color: var(--rojo-agricola);
+      margin-bottom: 15px;
+      border-bottom: 2px solid var(--gris-claro);
       padding-bottom: 8px;
+      font-weight: bold;
     }
 
     .form-group {
-      margin-bottom: 14px;
-    }
-
-    .form-row {
-      display: flex;
-      gap: 12px;
-    }
-
-    .form-row .form-group {
-      flex: 1;
+      margin-bottom: 15px;
     }
 
     label {
       display: block;
-      font-size: 0.85rem;
-      font-weight: 600;
       margin-bottom: 6px;
-      color: #4A5568;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #455A64;
     }
 
     input, select, textarea {
       width: 100%;
       padding: 12px;
-      border: 1px solid var(--border-color);
+      border: 1.5px solid var(--gris-borde);
       border-radius: 8px;
-      font-size: 1rem;
+      font-size: 0.95rem;
       background-color: #FAFAFA;
-      transition: border 0.2s;
+      transition: border-color 0.2s ease;
     }
 
     input:focus, select:focus, textarea:focus {
       outline: none;
-      border-color: var(--primary-green);
-      background-color: #FFF;
+      border-color: var(--rojo-agricola);
+      background-color: var(--blanco);
     }
 
     input[readonly] {
-      background-color: #EDF2F7;
-      color: #718096;
+      background-color: #ECEFF1;
+      color: #546E7A;
+      font-weight: 600;
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 70px;
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .row .form-group {
+      flex: 1;
     }
 
     .btn {
@@ -166,386 +154,395 @@
       font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       transition: background 0.2s;
     }
 
     .btn-primary {
-      background-color: var(--primary-red);
-      color: white;
+      background-color: var(--rojo-agricola);
+      color: var(--blanco);
+      box-shadow: 0 3px 6px rgba(179, 38, 30, 0.3);
     }
 
     .btn-primary:active {
-      background-color: #A81E15;
+      background-color: var(--rojo-oscuro);
     }
 
     .btn-sync {
-      background-color: var(--primary-green);
-      color: white;
+      background-color: var(--verde-hoja);
+      color: var(--blanco);
       margin-top: 10px;
     }
 
-    .records-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
+    /* Tabla de registros guardados */
+    .table-container {
+      overflow-x: auto;
     }
 
-    .badge {
-      background: var(--primary-red);
-      color: white;
-      border-radius: 12px;
-      padding: 2px 8px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
       font-size: 0.8rem;
     }
 
-    .record-item {
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 8px;
-      background: #FAFAFA;
+    th, td {
+      padding: 10px 8px;
+      text-align: left;
+      border-bottom: 1px solid var(--gris-borde);
     }
 
-    .record-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.85rem;
+    th {
+      background-color: #F0F4F8;
+      color: var(--texto-primario);
+    }
+
+    .badge {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 0.7rem;
       font-weight: bold;
-      margin-bottom: 4px;
+      display: inline-block;
+      text-align: center;
     }
 
-    .record-status {
-      font-size: 0.75rem;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-
-    .status-pendiente { background: #FEFCBF; color: #744210; }
-    .status-sincronizado { background: #C6F6D5; color: #22543D; }
-
+    .badge-pendiente { background-color: #FFF3E0; color: #E65100; }
+    .badge-sincronizado { background-color: #E8F5E9; color: #1B5E20; }
+    .badge-error { background-color: #FFEBEE; color: #B71C1C; }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="brand">
-      <!-- Logo vectorizado incrustado directamente en Base64 para asegurar disponibilidad Offline -->
-      <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path fill='%23328829' d='M50 10 C 20 10 10 40 10 60 C 10 80 30 90 50 90 C 30 70 30 30 50 10 Z'/><path fill='%23D0291E' d='M50 20 C 80 20 90 40 90 60 C 90 80 70 90 50 90 C 70 70 70 40 50 20 Z'/><path fill='%23328829' d='M45 5 Q 60 15 50 30 Q 35 15 45 5 Z'/></svg>" alt="Logo Agrícola Huarmey">
-      <div>
-        <h1>AGRÍCOLA HUARMEY</h1>
-        <small style="font-size: 0.7rem; color: #666;">Bitácora de Campo</small>
-      </div>
-    </div>
-    <div id="connectionStatus" class="connection-status status-offline">
-      <span id="statusDot" class="status-dot offline-dot"></span>
-      <span id="statusText">Offline</span>
-    </div>
+    <img src="logo.png" alt="Logo Agrícola Huarmey" id="app-logo">
+    <h1>Agrícola Huarmey<br><small style="font-size: 0.75rem; font-weight: normal;">Incidencias en Campo</small></h1>
   </header>
 
   <div class="container">
-    <div class="card">
-      <h2 class="card-title">Registro de Incidencia</h2>
-      <form id="incidentForm">
-        
-        <div class="form-group">
-          <label for="fecha">FECHA INCIDENCIA</label>
-          <input type="date" id="fecha" required>
-        </div>
+    <!-- Indicador Estado de Conexión -->
+    <div id="status-bar" class="online">🌐 Modo Online - Conectado</div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="dia">DÍA</label>
-            <input type="text" id="dia" readonly placeholder="Auto">
-          </div>
-          <div class="form-group">
-            <label for="semana">SEMANA</label>
-            <input type="text" id="semana" readonly placeholder="Auto">
-          </div>
-        </div>
+    <!-- Formulario de Entrada -->
+    <form id="incidencia-form" class="card">
+      <div class="card-title">📝 Nuevo Registro de Incidencia</div>
 
-        <div class="form-group">
-          <label for="responsableRegistro">RESPONSABLE REGISTRO</label>
-          <select id="responsableRegistro" required>
-            <option value="">Seleccione...</option>
-            <option value="RIVALDO VALLES">RIVALDO VALLES</option>
-            <option value="JOSE CHAVEZ">JOSE CHAVEZ</option>
-          </select>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="horaInicio">HORA INICIO</label>
-            <input type="time" id="horaInicio" required>
-          </div>
-          <div class="form-group">
-            <label for="horaFin">HORA FIN</label>
-            <input type="time" id="horaFin" required>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="personas">PERSONAS</label>
-          <input type="number" id="personas" min="1" required placeholder="0">
-        </div>
-
-        <div class="form-group">
-          <label for="tipo">TIPO</label>
-          <select id="tipo" required>
-            <option value="">Seleccione...</option>
-            <option value="CLIMA">CLIMA</option>
-            <option value="PRODUCCION">PRODUCCION</option>
-            <option value="TRANSPORTE">TRANSPORTE</option>
-            <option value="SSOMA">SSOMA</option>
-            <option value="COMEDORES">COMEDORES</option>
-            <option value="HERRAMIENTAS COSECHA">HERRAMIENTAS COSECHA</option>
-            <option value="ALIMENTACIÓN">ALIMENTACIÓN</option>
-            <option value="PAGOS">PAGOS</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="descripcion">DESCRIPCIÓN DEL PROBLEMA</label>
-          <textarea id="descripcion" required placeholder="Detalle el problema encontrado..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="accion">ACCIÓN TOMADA</label>
-          <textarea id="accion" required placeholder="Detalle la acción correctiva..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="variedad">VARIEDAD</label>
-          <select id="variedad" required>
-            <option value="">Seleccione...</option>
-            <option value="MAGICA 2024">MAGICA 2024</option>
-            <option value="MAGICA 2025">MAGICA 2025</option>
-            <option value="MEGA EARLY 2026">MEGA EARLY 2026</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="moduloTurno">MÓDULO - TURNO</label>
-          <select id="moduloTurno" required>
-            <option value="">Seleccione...</option>
-            <!-- Generado dinámicamente vía JS para limpieza de código -->
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="responsable">RESPONSABLE</label>
-          <select id="responsable" required>
-            <option value="">Seleccione...</option>
-            <option value="Recursos Humanos (RRHH)">Recursos Humanos (RRHH)</option>
-            <option value="Seguridad y Salud (SST)">Seguridad y Salud (SST)</option>
-            <option value="Operaciones / Campo">Operaciones / Campo</option>
-            <option value="Riego e Infraestructura">Riego e Infraestructura</option>
-            <option value="Logística">Logística</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Guardar Registro</button>
-      </form>
-    </div>
-
-    <div class="card">
-      <div class="records-header">
-        <h3>Registros Locales</h3>
-        <span id="pendingBadge" class="badge">0 Pendientes</span>
+      <div class="form-group">
+        <label for="fecha_incidencia">FECHA INCIDENCIA *</label>
+        <input type="date" id="fecha_incidencia" required>
       </div>
-      <div id="recordsList"></div>
-      <button id="btnSync" class="btn btn-sync" style="display: none;">Sincronizar Ahora</button>
+
+      <div class="row">
+        <div class="form-group">
+          <label for="dia">DÍA</label>
+          <input type="text" id="dia" readonly placeholder="AUTO">
+        </div>
+        <div class="form-group">
+          <label for="semana">SEMANA</label>
+          <input type="text" id="semana" readonly placeholder="AUTO">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="responsable_registro">RESPONSABLE REGISTRO *</label>
+        <select id="responsable_registro" required>
+          <option value="">Seleccione...</option>
+          <option value="RIVALDO VALLES">RIVALDO VALLES</option>
+          <option value="JOSE CHAVEZ">JOSE CHAVEZ</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="form-group">
+          <label for="hora_inicio">HORA INICIO *</label>
+          <input type="time" id="hora_inicio" required>
+        </div>
+        <div class="form-group">
+          <label for="hora_fin">HORA FIN *</label>
+          <input type="time" id="hora_fin" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="personas">PERSONAS (Nº) *</label>
+        <input type="number" id="personas" min="1" step="1" required placeholder="Cantidad de personal">
+      </div>
+
+      <div class="form-group">
+        <label for="tipo">TIPO *</label>
+        <select id="tipo" required>
+          <option value="">Seleccione...</option>
+          <option value="CLIMA">CLIMA</option>
+          <option value="PRODUCCION">PRODUCCION</option>
+          <option value="TRANSPORTE">TRANSPORTE</option>
+          <option value="SSOMA">SSOMA</option>
+          <option value="COMEDORES">COMEDORES</option>
+          <option value="HERRAMIENTAS COSECHA">HERRAMIENTAS COSECHA</option>
+          <option value="ALIMENTACIÓN">ALIMENTACIÓN</option>
+          <option value="PAGOS">PAGOS</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion_problema">DESCRIPCIÓN DEL PROBLEMA *</label>
+        <textarea id="descripcion_problema" rows="3" required placeholder="Detalle la incidencia acontecida..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="accion_tomada">ACCIÓN TOMADA *</label>
+        <textarea id="accion_tomada" rows="3" required placeholder="Describa la solución o medidas aplicadas..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="variedad">VARIEDAD *</label>
+        <select id="variedad" required>
+          <option value="">Seleccione...</option>
+          <option value="MAGICA 2024">MAGICA 2024</option>
+          <option value="MAGICA 2025">MAGICA 2025</option>
+          <option value="MEGA EARLY 2026">MEGA EARLY 2026</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="modulo_turno">MÓDULO - TURNO *</label>
+        <select id="modulo_turno" required>
+          <option value="">Seleccione...</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="responsable">RESPONSABLE ÁREA *</label>
+        <select id="responsable" required>
+          <option value="">Seleccione...</option>
+          <option value="Recursos Humanos (RRHH)">Recursos Humanos (RRHH)</option>
+          <option value="Seguridad y Salud (SST)">Seguridad y Salud (SST)</option>
+          <option value="Operaciones / Campo">Operaciones / Campo</option>
+          <option value="Riego e Infraestructura">Riego e Infraestructura</option>
+          <option value="Logística">Logística</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn btn-primary">💾 Registrar Incidencia</button>
+    </form>
+
+    <!-- Panel de Registros Guardados / Sincronización -->
+    <div class="card">
+      <div class="card-title">📋 Bitácora Local</div>
+      <button id="btn-force-sync" class="btn btn-sync">🔄 Sincronizar Pendientes</button>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>Resp.</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-registros">
+            <!-- Registros dinámicos -->
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
   <script>
-    // Configuración Inicial e IndexedDB
+    // URL DE GOOGLE APPS SCRIPT (Reemplazar con la URL obtenida tras el despliegue)
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzokhYSW-4sDW8tqPzZ2-J9CCKeWZFI2uk9duXZtzH5DnXcC2l8vLcsGmuulNbYwv5w/exec";
+
+    // --- Cargar Opciones de Módulo - Turno Dinámicamente ---
+    const selectModuloTurno = document.getElementById('modulo_turno');
+    for (let m = 1; m <= 9; m++) {
+      for (let t = 1; t <= 5; t++) {
+        const option = document.createElement('option');
+        const val = `Módulo ${m}-Turno ${t}`;
+        option.value = val;
+        option.textContent = val;
+        selectModuloTurno.appendChild(option);
+      }
+    }
+
+    // --- Base de Datos IndexedDB ---
     let db;
-    const dbName = "AgricolaHuarmeyDB";
-    const request = indexedDB.open(dbName, 1);
+    const request = indexedDB.open('AgricolaHuarmeyDB', 1);
 
     request.onupgradeneeded = (e) => {
       db = e.target.result;
-      if (!db.objectStoreNames.contains("incidencias")) {
-        db.createObjectStore("incidencias", { keyPath: "id", autoIncrement: true });
+      if (!db.objectStoreNames.contains('incidencias')) {
+        const store = db.createObjectStore('incidencias', { keyPath: 'id', autoIncrement: true });
+        store.createIndex('estado', 'estado', { unique: false });
       }
     };
 
     request.onsuccess = (e) => {
       db = e.target.result;
-      renderRecords();
+      cargarTablaRegistros();
+      checkNetworkAndSync();
     };
 
-    // Poblado dinámico de Módulos y Turnos (Módulo 1 a 9, Turno 1 a 5)
-    const moduloSelect = document.getElementById('moduloTurno');
-    for (let m = 1; m <= 9; m++) {
-      for (let t = 1; t <= 5; t++) {
-        const option = document.createElement('option');
-        option.value = `Módulo ${m}-Turno ${t}`;
-        option.textContent = `Módulo ${m}-Turno ${t}`;
-        moduloSelect.appendChild(option);
-      }
-    }
+    request.onerror = (e) => console.error("Error IndexedDB:", e);
 
-    // Cálculo automático de DÍA y SEMANA al seleccionar fecha
-    document.getElementById('fecha').addEventListener('change', function() {
-      if (!this.value) return;
-      const dateVal = new Date(this.value + 'T00:00:00');
+    // --- Manejo de Fechas Automáticas ---
+    document.getElementById('fecha_incidencia').addEventListener('change', function() {
+      const fechaVal = this.value;
+      if (!fechaVal) return;
+
+      const fecha = new Date(fechaVal + 'T00:00:00');
       
+      // Día de la semana en mayúsculas
       const dias = ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'];
-      document.getElementById('dia').value = dias[dateVal.getDay()];
+      document.getElementById('dia').value = dias[fecha.getDay()];
 
-      // Cálculo número de semana ISO
-      const target = new Date(dateVal.valueOf());
-      const dayNr = (dateVal.getDay() + 6) % 7;
+      // Cálculo de Número de Semana ISO
+      const target = new Date(fecha.valueOf());
+      const dayNr = (fecha.getDay() + 6) % 7;
       target.setDate(target.getDate() - dayNr + 3);
       const firstThursday = target.valueOf();
       target.setMonth(0, 1);
       if (target.getDay() !== 4) {
         target.setMonth(0, 1 + ((4 - target.getDay() + 7) % 7));
       }
-      const weekNumber = 1 + Math.round((firstThursday - target) / 604800000);
+      const weekNumber = 1 + Math.round((firstThursday - target.valueOf()) / 604800000);
       document.getElementById('semana').value = `SEMANA - ${weekNumber}`;
     });
 
-    // Control de Estado Online/Offline
+    // --- Detección de Red ---
+    const statusBar = document.getElementById('status-bar');
     function updateOnlineStatus() {
-      const isOnline = navigator.onLine;
-      const statusDiv = document.getElementById('connectionStatus');
-      const statusDot = document.getElementById('statusDot');
-      const statusText = document.getElementById('statusText');
-
-      if (isOnline) {
-        statusDiv.className = "connection-status status-online";
-        statusDot.className = "status-dot online-dot";
-        statusText.textContent = "Online";
-        syncPendingData();
+      if (navigator.onLine) {
+        statusBar.className = 'online';
+        statusBar.textContent = '🌐 Modo Online - Conectado';
+        checkNetworkAndSync();
       } else {
-        statusDiv.className = "connection-status status-offline";
-        statusDot.className = "status-dot offline-dot";
-        statusText.textContent = "Offline";
+        statusBar.className = 'offline';
+        statusBar.textContent = '⚠️ Modo Offline - Trabajando localmente';
       }
     }
-
     window.addEventListener('online', updateOnlineStatus);
     window.addEventListener('offline', updateOnlineStatus);
-    updateOnlineStatus();
 
-    // Captura Formulario
-    document.getElementById('incidentForm').addEventListener('submit', function(e) {
+    // --- Envío del Formulario ---
+    document.getElementById('incidencia-form').addEventListener('submit', function(e) {
       e.preventDefault();
 
-      const record = {
-        fecha: document.getElementById('fecha').value,
+      const registro = {
+        fecha_incidencia: document.getElementById('fecha_incidencia').value,
         dia: document.getElementById('dia').value,
         semana: document.getElementById('semana').value,
-        responsableRegistro: document.getElementById('responsableRegistro').value,
-        horaInicio: document.getElementById('horaInicio').value,
-        horaFin: document.getElementById('horaFin').value,
-        personas: document.getElementById('personas').value,
+        responsable_registro: document.getElementById('responsable_registro').value,
+        hora_inicio: document.getElementById('hora_inicio').value,
+        hora_fin: document.getElementById('hora_fin').value,
+        personas: parseInt(document.getElementById('personas').value, 10),
         tipo: document.getElementById('tipo').value,
-        descripcion: document.getElementById('descripcion').value,
-        accion: document.getElementById('accion').value,
+        descripcion_problema: document.getElementById('descripcion_problema').value,
+        accion_tomada: document.getElementById('accion_tomada').value,
         variedad: document.getElementById('variedad').value,
-        moduloTurno: document.getElementById('moduloTurno').value,
+        modulo_turno: document.getElementById('modulo_turno').value,
         responsable: document.getElementById('responsable').value,
-        status: "Pendiente",
-        timestamp: new Date().getTime()
+        estado: 'Pendiente',
+        fecha_creacion: new Date().toISOString()
       };
 
-      const tx = db.transaction(["incidencias"], "readwrite");
-      const store = tx.objectStore("incidencias");
-      store.add(record);
+      const tx = db.transaction(['incidencias'], 'readwrite');
+      const store = tx.objectStore('incidencias');
+      store.add(registro);
 
       tx.oncomplete = () => {
-        this.reset();
-        renderRecords();
-        if (navigator.onLine) syncPendingData();
+        alert('✅ Registro guardado localmente');
+        document.getElementById('incidencia-form').reset();
+        cargarTablaRegistros();
+        if (navigator.onLine) checkNetworkAndSync();
       };
     });
 
-    // Renderizar lista local
-    function renderRecords() {
-      if (!db) return;
-      const tx = db.transaction(["incidencias"], "readonly");
-      const store = tx.objectStore("incidencias");
-      const request = store.getAll();
+    // --- Cargar Tabla en la Interfaz ---
+    function cargarTablaRegistros() {
+      const tbody = document.getElementById('tabla-registros');
+      tbody.innerHTML = '';
 
-      request.onsuccess = () => {
-        const records = request.result;
-        const listContainer = document.getElementById('recordsList');
-        const pendingBadge = document.getElementById('pendingBadge');
-        const btnSync = document.getElementById('btnSync');
+      const tx = db.transaction(['incidencias'], 'readonly');
+      const store = tx.objectStore('incidencias');
+      const req = store.openCursor(null, 'prev');
 
-        listContainer.innerHTML = "";
-        const pendingCount = records.filter(r => r.status === "Pendiente").length;
-        pendingBadge.textContent = `${pendingCount} Pendientes`;
+      req.onsuccess = (e) => {
+        const cursor = e.target.result;
+        if (cursor) {
+          const item = cursor.value;
+          const tr = document.createElement('tr');
+          
+          let classBadge = 'badge-pendiente';
+          if (item.estado === 'Sincronizado') classBadge = 'badge-sincronizado';
+          if (item.estado === 'Error') classBadge = 'badge-error';
 
-        if (pendingCount > 0 && navigator.onLine) {
-          btnSync.style.display = "block";
-        } else {
-          btnSync.style.display = "none";
-        }
-
-        records.reverse().forEach(r => {
-          const item = document.createElement('div');
-          item.className = "record-item";
-          item.innerHTML = `
-            <div class="record-header">
-              <span>${r.tipo} (${r.moduloTurno})</span>
-              <span class="record-status status-${r.status.toLowerCase()}">${r.status}</span>
-            </div>
-            <div style="font-size: 0.8rem; color: #666;">
-              ${r.fecha} | ${r.responsableRegistro}
-            </div>
+          tr.innerHTML = `
+            <td>${item.fecha_incidencia}</td>
+            <td>${item.tipo}</td>
+            <td>${item.responsable_registro}</td>
+            <td><span class="badge ${classBadge}">${item.estado}</span></td>
           `;
-          listContainer.appendChild(item);
-        });
+          tbody.appendChild(tr);
+          cursor.continue();
+        }
       };
     }
 
-    // Sincronización con Google Apps Script
-    function syncPendingData() {
-      if (!db) return;
-      const tx = db.transaction(["incidencias"], "readwrite");
-      const store = tx.objectStore("incidencias");
-      const request = store.getAll();
+    // --- Motor de Sincronización con Google Sheets ---
+    async function checkNetworkAndSync() {
+      if (!navigator.onLine) return;
 
-      request.onsuccess = () => {
-        const records = request.result;
-        const pendingRecords = records.filter(r => r.status === "Pendiente");
+      const tx = db.transaction(['incidencias'], 'readonly');
+      const store = tx.objectStore('incidencias');
+      const req = store.getAll();
 
-        if (pendingRecords.length === 0) return;
+      req.onsuccess = async () => {
+        const registros = req.result;
+        const pendientes = registros.filter(r => r.estado === 'Pendiente' || r.estado === 'Error');
 
-        // ScriptURL es dinámico si corre sobre Apps Script Web App
-        google.script.run
-          .withSuccessHandler(() => {
-            const updateTx = db.transaction(["incidencias"], "readwrite");
-            const updateStore = updateTx.objectStore("incidencias");
-            
-            pendingRecords.forEach(rec => {
-              rec.status = "Sincronizado";
-              updateStore.put(rec);
+        for (let item of pendientes) {
+          try {
+            const respuesta = await fetch(APPS_SCRIPT_URL, {
+              method: 'POST',
+              mode: 'no-cors', // Soporte para Google Apps Script Web App
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(item)
             });
 
-            updateTx.oncomplete = () => renderRecords();
-          })
-          .withFailureHandler(err => console.error("Error al sincronizar:", err))
-          .doPost({ postData: { contents: JSON.stringify(pendingRecords) } });
+            // Al usar no-cors asumimos la entrega si no arroja excepción de red
+            actualizarEstadoRegistro(item.id, 'Sincronizado');
+          } catch (err) {
+            console.error("Error sincronizando:", err);
+            actualizarEstadoRegistro(item.id, 'Error');
+          }
+        }
       };
     }
 
-    document.getElementById('btnSync').addEventListener('click', syncPendingData);
+    function actualizarEstadoRegistro(id, nuevoEstado) {
+      const tx = db.transaction(['incidencias'], 'readwrite');
+      const store = tx.objectStore('incidencias');
+      const req = store.get(id);
 
-    // Registrar Service Worker
+      req.onsuccess = () => {
+        const data = req.result;
+        if (data) {
+          data.estado = nuevoEstado;
+          store.put(data);
+        }
+      };
+
+      tx.oncomplete = () => {
+        cargarTablaRegistros();
+      };
+    }
+
+    document.getElementById('btn-force-sync').addEventListener('click', checkNetworkAndSync);
+
+    // --- Registro del Service Worker ---
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log('SW registrado'))
-        .catch(err => console.error('Error registrando SW', err));
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(() => console.log('Service Worker Registrado'))
+        .catch(err => console.error('Error al registrar SW:', err));
     }
   </script>
 </body>
