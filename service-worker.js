@@ -1,47 +1,42 @@
-const CACHE_NAME = 'huarmey-incidencias-v1';
-const ASSETS = [
-  './',
+const CACHE_NAME = 'huarmey-cache-v2';
+const urlsToCache = [
   './index.html',
   './manifest.json',
-  './logo.png'
+  './image_0.png',
+  'https://cdn.jsdelivr.net/npm/dexie@3.2.0/dist/dexie.min.js',
+  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
 
-// Instalación del Service Worker
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(urlsToCache))
+      .then(() => self.skipWaiting())
   );
-  self.skipWaiting();
 });
 
-// Activación y limpieza de cachés antiguas
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then((keys) => {
+    caches.keys().then(cacheNames => {
       return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            return caches.delete(key);
+        cacheNames.map(cache => {
+          if (cache !== CACHE_NAME) {
+            return caches.delete(cache);
           }
         })
       );
     })
   );
-  self.clients.claim();
 });
 
-// Intercepción de peticiones HTTP
-self.addEventListener('fetch', (event) => {
-  // Ignorar peticiones a Google Apps Script para no interferir con la sincronización
-  if (event.request.url.includes('script.google.com')) {
-    return;
-  }
-  
+self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    caches.match(event.request)
+      .then(response => {
+        if (response) {
+          return response;
+        }
+        return fetch(event.request);
+      })
   );
 });
