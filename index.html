@@ -148,8 +148,6 @@
         .error { background-color: #fff5f5; color: #9b2c2c; border: 1px solid #fed7d7; }
         .pending { background-color: #fefcbf; color: #744210; border: 1px solid #faf089; }
 
-        .auto-field { display: none; }
-
         @media (max-width: 480px) {
             .form-grid {
                 grid-template-columns: 1fr;
@@ -167,7 +165,7 @@
     <div class="container">
         <header>
             <img src="ICO FRUSAN.png" alt="Logo Agrícola Huarmey" class="logo">
-            <h1>Registro de Incidencias campaña 2026, Agrícola Huarmey | fundo Frusan</h1>
+            <h1>Registro de Incidencias</h1>
         </header>
 
         <form id="incidenciaForm" class="form-grid">
@@ -229,6 +227,18 @@
                 <textarea id="accion_tomada" name="accion_tomada" required></textarea>
             </div>
 
+            <div class="form-group full-width">
+                <label for="variedad">Variedad:</label>
+                <select id="variedad" name="variedad" required>
+                    <option value="">Seleccione Variedad</option>
+                    <option value="VENTURA">VENTURA</option>
+                    <option value="BILOCI">BILOCI</option>
+                    <option value="ROCIO">ROCIO</option>
+                    <option value="SECOYA POP">SECOYA POP</option>
+
+                </select>
+            </div>
+
             <div class="form-group">
                 <label for="modulo_turno">Módulo-Turno:</label>
                 <select id="modulo_turno" name="modulo_turno" required>
@@ -256,7 +266,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/dexie@3.2.0/dist/dexie.min.js"></script>
     <script>
-        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwKkCrTTBd4R382MgkuYLZ5HHd7Hrt25BnFkrUQOYIMhBcepmbzYs8F0sC-3l7UYM-A/exec";
+        const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycby-6CirM6r-YQgGu0u_MU4chULnRyBH70OVZaMYbLLRMUbt04zkW_PGRc5TyBjUxxId/exec";
 
         // Cargar las opciones de Módulo-Turno
         const moduloSelect = document.getElementById('modulo_turno');
@@ -321,7 +331,7 @@
                 });
 
                 await db.incidencias.update(incidencia.id, { status: 'Sincronizado' });
-                showLog('Registro guardado correctamente en la base datos de la Bitácora.', 'success');
+                showLog('Registro guardado correctamente en Google Sheets.', 'success');
 
             } catch (error) {
                 await db.incidencias.update(incidencia.id, { status: 'Error' });
@@ -345,7 +355,7 @@
         }
 
         window.addEventListener('online', sincronizarPendientes);
-        sincronizarPendientes(); // Intentar al cargar si hay conexión
+        sincronizarPendientes();
 
         function getDiaSemana(fechaStr) {
             if (!fechaStr) return "";
