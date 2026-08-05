@@ -45,6 +45,7 @@
             box-shadow: var(--shadow);
             padding: 32px 24px;
             border: 1px solid var(--border-color);
+            position: relative;
         }
 
         header {
@@ -63,6 +64,28 @@
             font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: -0.5px;
+        }
+
+        /* Botón de Instalación PWA */
+        .btn-install {
+            display: none; /* Oculto hasta que el evento prompt esté listo */
+            width: 100%;
+            background-color: #2b6cb0;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: background 0.2s ease;
+        }
+
+        .btn-install:hover {
+            background-color: #2c5282;
         }
 
         .form-grid {
@@ -168,6 +191,9 @@
             <h1>Registro de Incidencias Cosecha Arándanos 2026</h1>
         </header>
 
+        <!-- Botón para instalar la App en el teléfono/PC -->
+        <button id="btnInstall" class="btn-install">📲 Instalar Aplicación en el Dispositivo</button>
+
         <form id="incidenciaForm" class="form-grid">
             <div class="form-group full-width">
                 <label for="fecha_incidencia">Fecha de Incidencia:</label>
@@ -235,7 +261,6 @@
                     <option value="MAGICA 2025">MAGICA 2025</option>
                     <option value="MEGA EARLY 2026">MEGA EARLY 2026</option>
                     <option value="IQBERRY 2025">IQBERRY 2025</option>
-
                 </select>
             </div>
 
@@ -279,6 +304,7 @@
             }
         }
 
+        // Configuración de base de datos local (IndexedDB)
         const db = new Dexie('BitacorasHuarmeyDB');
         db.version(1).stores({
             incidencias: '++id,fecha_incidencia,status'
@@ -286,6 +312,33 @@
 
         const form = document.getElementById('incidenciaForm');
         const log = document.getElementById('log');
+        const btnInstall = document.getElementById('btnInstall');
+
+        let deferredPrompt;
+
+        // Captura del evento de instalación PWA
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            btnInstall.style.display = 'block';
+        });
+
+        btnInstall.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    console.log('El usuario instaló la App');
+                }
+                deferredPrompt = null;
+                btnInstall.style.display = 'none';
+            }
+        });
+
+        window.addEventListener('appinstalled', () => {
+            btnInstall.style.display = 'none';
+            console.log('PWA instalada con éxito');
+        });
 
         function showLog(message, type) {
             log.textContent = message;
@@ -294,6 +347,7 @@
             setTimeout(() => { log.style.display = 'none'; }, 5000);
         }
 
+        // Envío del formulario
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -304,20 +358,23 @@
             incidencia.semana = getSemanaDelAño(incidencia.fecha_incidencia);
             incidencia.status = 'Pendiente';
 
+            // Limpiar el formulario de inmediato para permitir nuevos ingresos
+            form.reset();
+
             try {
+                // 1. Guardar localmente
                 const id = await db.incidencias.add(incidencia);
                 incidencia.id = id;
                 
+                // 2. Intentar enviar a Google Sheets si hay internet
                 if (navigator.onLine) {
                     await sincronizarIncidencia(incidencia);
                 } else {
-                    showLog('Guardado localmente. Se enviará automáticamente al recuperar internet.', 'pending');
+                    showLog('Guardado localmente en el celular (Sin Internet). Se enviará automáticamente cuando conectes a red.', 'pending');
                 }
 
             } catch (error) {
-                showLog('Error al guardar localmente: ' + error.message, 'error');
-            } finally {
-                form.reset();
+                showLog('Error al guardar registro en dispositivo: ' + error.message, 'error');
             }
         });
 
@@ -331,14 +388,15 @@
                 });
 
                 await db.incidencias.update(incidencia.id, { status: 'Sincronizado' });
-                showLog('Registro guardado correctamente en Google Sheets.', 'success');
+                showLog('Registro guardado localmente y enviado con éxito a Google Sheets.', 'success');
 
             } catch (error) {
                 await db.incidencias.update(incidencia.id, { status: 'Error' });
-                showLog('Sin conexión. La incidencia se enviará automáticamente al estar en línea.', 'error');
+                showLog('Guardado en el teléfono. Pendiente de sincronizar al recuperar internet.', 'pending');
             }
         }
 
+        // Sincronización automática en segundo plano al recuperar señal
         async function sincronizarPendientes() {
             if (!navigator.onLine) return;
 
@@ -350,7 +408,7 @@
                     await sincronizarIncidencia(incidencia);
                 }
             } catch (error) {
-                console.error('Error durante sincronización background:', error);
+                console.error('Error durante sincronización automática:', error);
             }
         }
 
@@ -377,8 +435,8 @@
 
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('service-worker.js')
-                .then(() => console.log('SW activo'))
-                .catch(err => console.error('Error SW:', err));
+                .then(() => console.log('Service Worker Registrado y Operativo'))
+                .catch(err => console.error('Error Service Worker:', err));
         }
     </script>
 </body>
