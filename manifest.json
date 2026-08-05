@@ -1,10 +1,11 @@
 {
-  "name": "Bitácora Huarmey",
+  "name": "Bitácora Huarmey - Campo",
   "short_name": "Bitácora",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#a10f13",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "image_0.png",
