@@ -1,4 +1,4 @@
-const CACHE_NAME = 'huarmey-cache-v3';
+const CACHE_NAME = 'huarmey-cache-v4';
 const urlsToCache = [
   './',
   './index.html',
@@ -32,7 +32,6 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // Ignorar peticiones hacia Google Apps Script (se manejan vía IndexedDB)
   if (event.request.url.includes('script.google.com')) {
     return;
   }
@@ -41,7 +40,7 @@ self.addEventListener('fetch', event => {
     caches.match(event.request)
       .then(response => {
         if (response) {
-          return response; // Retorna desde caché local si no hay red
+          return response;
         }
         return fetch(event.request);
       })
