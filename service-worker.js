@@ -1,8 +1,10 @@
-const CACHE_NAME = 'huarmey-cache-v2';
+const CACHE_NAME = 'huarmey-cache-v3';
 const urlsToCache = [
+  './',
   './index.html',
   './manifest.json',
   './image_0.png',
+  './ICO FRUSAN.png',
   'https://cdn.jsdelivr.net/npm/dexie@3.2.0/dist/dexie.min.js',
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
@@ -25,16 +27,21 @@ self.addEventListener('activate', event => {
           }
         })
       );
-    })
+    }).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', event => {
+  // Ignorar peticiones hacia Google Apps Script (se manejan vía IndexedDB)
+  if (event.request.url.includes('script.google.com')) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then(response => {
         if (response) {
-          return response;
+          return response; // Retorna desde caché local si no hay red
         }
         return fetch(event.request);
       })
