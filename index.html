@@ -397,7 +397,7 @@
 
                 await db.incidencias.update(incidencia.id, { status: 'Sincronizado' });
                 
-                const msgExito = '✅ Se ha guardado y enviado la información con éxito a Google Sheets.';
+                const msgExito = '✅ Se ha guardado y enviado la información a la base datos de las BITACORAS...';
                 showLog(msgExito, 'success');
                 alert(msgExito); // Alerta de confirmación exitosa
 
