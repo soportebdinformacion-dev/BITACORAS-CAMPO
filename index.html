@@ -68,7 +68,7 @@
 
         /* Botón de Instalación PWA */
         .btn-install {
-            display: none; /* Oculto hasta que el evento prompt esté listo */
+            display: none;
             width: 100%;
             background-color: #2b6cb0;
             color: #ffffff;
@@ -159,10 +159,10 @@
 
         #log {
             margin-top: 20px;
-            padding: 12px 16px;
+            padding: 14px 16px;
             border-radius: 6px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 0.95rem;
+            font-weight: 600;
             display: none;
             text-align: center;
         }
@@ -344,12 +344,18 @@
             log.textContent = message;
             log.className = type;
             log.style.display = 'block';
-            setTimeout(() => { log.style.display = 'none'; }, 5000);
+            setTimeout(() => { log.style.display = 'none'; }, 6000);
         }
 
-        // Envío del formulario
+        // Envío del formulario con Confirmación y Alerta
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            // 1. Mensaje de confirmación
+            const confirmacion = confirm("¿Está seguro de guardar y enviar la información a Google Sheets?");
+            if (!confirmacion) {
+                return; // Si el usuario cancela, no hace nada
+            }
 
             const formData = new FormData(form);
             const incidencia = Object.fromEntries(formData.entries());
@@ -362,15 +368,17 @@
             form.reset();
 
             try {
-                // 1. Guardar localmente
+                // 2. Guardar localmente
                 const id = await db.incidencias.add(incidencia);
                 incidencia.id = id;
                 
-                // 2. Intentar enviar a Google Sheets si hay internet
+                // 3. Intentar enviar a Google Sheets si hay internet
                 if (navigator.onLine) {
                     await sincronizarIncidencia(incidencia);
                 } else {
-                    showLog('Guardado localmente en el celular (Sin Internet). Se enviará automáticamente cuando conectes a red.', 'pending');
+                    const msgSinConexion = 'MODO CAMPO (SIN INTERNET): La información se guardó en el dispositivo. Se enviará a Google Sheets automáticamente al recuperar señal.';
+                    showLog(msgSinConexion, 'pending');
+                    alert('⚠️ ' + msgSinConexion);
                 }
 
             } catch (error) {
@@ -388,11 +396,15 @@
                 });
 
                 await db.incidencias.update(incidencia.id, { status: 'Sincronizado' });
-                showLog('Registro guardado localmente y enviado con éxito a Google Sheets.', 'success');
+                
+                const msgExito = '✅ Se ha guardado y enviado la información con éxito a Google Sheets.';
+                showLog(msgExito, 'success');
+                alert(msgExito); // Alerta de confirmación exitosa
 
             } catch (error) {
                 await db.incidencias.update(incidencia.id, { status: 'Error' });
-                showLog('Guardado en el teléfono. Pendiente de sincronizar al recuperar internet.', 'pending');
+                const msgPendiente = 'Se guardó en el teléfono pero falló la conexión. Queda pendiente para envío automático.';
+                showLog(msgPendiente, 'pending');
             }
         }
 
