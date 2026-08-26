@@ -4,7 +4,7 @@ const urlsToCache = [
   './index.html',
   './manifest.json',
   './image_0.png',
-  './ICO FRUSAN.png',
+  './LOGO HUARMEYICO FRUSAN.png',
   'https://cdn.jsdelivr.net/npm/dexie@3.2.0/dist/dexie.min.js',
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
 ];
